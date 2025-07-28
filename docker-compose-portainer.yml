@@ -151,6 +151,8 @@ services:
       - ./init.sql:/data/application/init.sql
     networks:
       - ragflow
+    env_file:
+      - stack.env
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-uroot", "-p${MYSQL_PASSWORD}"]
       interval: 10s
@@ -174,7 +176,8 @@ services:
     networks:
       - ragflow
     restart: on-failure
-
+    env_file:
+      - stack.env
   redis:
     # swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/valkey/valkey:8
     image: valkey/valkey:8
@@ -187,7 +190,8 @@ services:
     networks:
       - ragflow
     restart: on-failure
-
+    env_file:
+      - stack.env
   ragflow:
     depends_on:
       mysql:
@@ -209,7 +213,8 @@ services:
       - ../history_data_agent:/ragflow/history_data_agent
       - ./service_conf.yaml.template:/ragflow/conf/service_conf.yaml.template
       - ./entrypoint.sh:/ragflow/entrypoint.sh
-
+    env_file:
+      - stack.env
     environment:
       - TZ=${TIMEZONE}
       - HF_ENDPOINT=${HF_ENDPOINT}
